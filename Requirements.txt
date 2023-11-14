@@ -1,0 +1,5 @@
+Streamline
+openai
+boto3
+PIL
+langchain
