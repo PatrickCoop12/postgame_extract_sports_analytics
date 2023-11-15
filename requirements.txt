@@ -4,4 +4,5 @@ boto3
 pillow
 langchain
 chromadb
+pysqlite3-binary
 
