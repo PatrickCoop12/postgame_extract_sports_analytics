@@ -4,4 +4,4 @@ boto3
 pillow
 langchain
 chromadb
-sqlite==3.44.0
+pysqlite
