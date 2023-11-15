@@ -91,7 +91,7 @@ if "messages" not in st.session_state:
 if file_upload is not None:
     st.markdown('#### Chatbot')
 # Retriever and word extraction
-    with open(os.path(file_upload.name),"wb") as f: 
+    with open(file_upload.name,"wb") as f: 
       f.write(file_upload.getbuffer())
 
     
