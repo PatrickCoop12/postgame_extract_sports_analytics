@@ -1,5 +1,5 @@
 Streamline
-openai==0.27.0
+openai==0.28.1
 boto3
 pillow
 langchain
