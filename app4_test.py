@@ -8,6 +8,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from pathlib import Path
+import os
 
 # Initializing textract API
 
@@ -90,8 +91,12 @@ if "messages" not in st.session_state:
 if file_upload is not None:
     st.markdown('#### Chatbot')
 # Retriever and word extraction
-    retriever, words = document_to_retriever(file_upload.read(), 4000, 2)
-    with open(file_upload, mode='wb') as w:
+    with open(os.path.join("tempDir",file_upload.name),"wb") as f: 
+      f.write(image_file.getbuffer())
+
+    
+    retriever, words = document_to_retriever(file_upload.name, 4000, 2)
+    with open(file_upload.name, mode='wb') as w:
         w.write(file_upload.getvalue())
     if '.pdf' not in file_upload.name:
         image = Image.open(file_upload.name)
