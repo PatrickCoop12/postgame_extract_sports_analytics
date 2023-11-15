@@ -14,6 +14,9 @@ import sys
 
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
+
+os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+
 # Initializing textract API
 
 textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id='AKIASF2P7IDFKIGWFHIU',aws_secret_access_key='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')
@@ -42,7 +45,7 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     splits = text_splitter.create_documents([words])
     print(splits)
-    vectorstore = Chroma.from_documents(documents=splits,embedding=OpenAIEmbeddings(openai_api_key='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'))
+    vectorstore = Chroma.from_documents(documents=splits,embedding=OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY))
     retriever = vectorstore.as_retriever()
 
 
@@ -55,7 +58,7 @@ if "memory" not in st.session_state:
 def generate_response(retriever, input_text):
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4-1106-preview", temperature=0,
-                                                          openai_api_key='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'),
+                                                          openai_api_key=OPENAI_API_KEY),
                                                retriever=retriever, verbose=True, memory=st.session_state.memory)
     result = qa({"chat_history": chat_history, "question":input_text})
     return result['answer']
