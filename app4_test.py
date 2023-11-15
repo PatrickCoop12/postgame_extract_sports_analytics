@@ -91,8 +91,8 @@ if "messages" not in st.session_state:
 if file_upload is not None:
     st.markdown('#### Chatbot')
 # Retriever and word extraction
-    with open(os.path.join("tempDir",file_upload.name),"wb") as f: 
-      f.write(image_file.getbuffer())
+    with open(os.path(file_upload.name),"wb") as f: 
+      f.write(file_upload.getbuffer())
 
     
     retriever, words = document_to_retriever(file_upload.name, 4000, 2)
