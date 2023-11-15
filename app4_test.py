@@ -9,6 +9,9 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from pathlib import Path
 import os
+import sys
+
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 # Initializing textract API
 
