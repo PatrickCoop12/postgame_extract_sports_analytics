@@ -15,7 +15,7 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
-os.environ['OPENAI_API_KEY'] = st.secrets['OPENAI_API_KEY']
+OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 
 # Initializing textract API
 
