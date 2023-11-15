@@ -90,7 +90,7 @@ if "messages" not in st.session_state:
 if file_upload is not None:
     st.markdown('#### Chatbot')
 # Retriever and word extraction
-    retriever, words = document_to_retriever(file_upload.name, 4000, 2)
+    retriever, words = document_to_retriever(file_upload, 4000, 2)
     with open(file_upload, mode='wb') as w:
         w.write(file_upload.getvalue())
     if '.pdf' not in file_upload.name:
