@@ -11,6 +11,10 @@ from pathlib import Path
 import os
 __import__('pysqlite3')
 import sys
+from textractor import Textractor
+from textractor import Textractor
+from textractor.visualizers.entitylist import EntityList
+from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
@@ -101,6 +105,16 @@ if file_upload is not None:
     with open(file_upload.name,"wb") as f: 
       f.write(file_upload.getbuffer())
 
+    #testing
+    extractor = Textractor(profile_name='pat',region_name="us-east-1", kms_key_id= '4b28ef85-000d-44e3-9210-cca4c06af170')
+    document = extractor.analyze_document(
+        file_source='box1.pdf',
+        features=[TextractFeatures.TABLES],
+        save_image=True
+    )
+    table = EntityList(document.tables)
+    table[3].to_pandas()
+    
     
     retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     with open(file_upload.name, mode='wb') as w:
