@@ -7,4 +7,4 @@ chromadb
 pysqlite3-binary
 tiktoken
 s3fs
-
+amazon-textract-textractor
