@@ -119,6 +119,8 @@ if file_upload is not None:
     )
 
     document.export_tables_to_excel("download.xlsx")
+    with open('download.xlsx', "rb") as fh:
+        buffer = io.BytesIO(fh.read())
     
     retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     with open(file_upload.name, mode='wb') as w:
@@ -142,7 +144,7 @@ if file_upload is not None:
         st.sidebar.download_button('download Scan', file_upload, file_name=file_upload.name)
 
     if option == 'As Excel':
-        st.sidebar.download_button('download excel', 'download.xlsx', file_name = 'download.xlsx')
+        st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
 # Scanner tool implementation
 
 
