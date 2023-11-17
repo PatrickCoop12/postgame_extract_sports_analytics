@@ -15,19 +15,20 @@ from textractor import Textractor
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 
-#test
-os.environ['AWS_ACCESS_KEY_ID'] = 'AKIASF2P7IDFKIGWFHIU'
-os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
+#Calling required API keys from secrets
+os.environ['AWS_ACCESS_KEY_ID'] = st.secrets['AWS_ACCESS_KEY_ID']
+os.environ['AWS_SECRET_ACCESS_KEY'] = st.secrets['AWS_SECRET_ACCESS_KEY']
+OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 
+#Required for chromadb module to function
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
-OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 
 # Initializing textract API
 
 textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id='AKIASF2P7IDFKIGWFHIU',aws_secret_access_key='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')
-#test
+# Initializing extractor
 extractor = Textractor(region_name="us-east-1", kms_key_id= '4b28ef85-000d-44e3-9210-cca4c06af170')
 
 # Creating
@@ -117,7 +118,7 @@ if file_upload is not None:
     save_image=True
     )
     
-    
+    document.export_tables_to_excel("download.xlsx")
     
     retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     with open(file_upload.name, mode='wb') as w:
@@ -131,7 +132,7 @@ if file_upload is not None:
 # PDF Scan conversion
     option = st.sidebar.selectbox(
         'Export',
-        ('Select', 'As .txt File','As Scan')
+        ('Select', 'As .txt File','As Scan', 'As Excel')
     )
     if option == 'As .txt File':
         text_export = words
@@ -139,6 +140,9 @@ if file_upload is not None:
 
     if option == 'As Scan':
         st.sidebar.download_button('download Scan', file_upload, file_name=file_upload.name)
+
+    if option == 'As Excel':
+        st.sidebar.download_button('download excel', "download.xlsx", file_name = 'download.xlsx')
 # Scanner tool implementation
 
 
