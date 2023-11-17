@@ -11,6 +11,11 @@ from pathlib import Path
 import os
 __import__('pysqlite3')
 import sys
+from textractor import Textractor
+from PIL import Image
+from textractor import Textractor
+from textractor.visualizers.entitylist import EntityList
+from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 
 #test
 os.environ['AWS_ACCESS_KEY_ID'] = 'AKIASF2P7IDFKIGWFHIU'
