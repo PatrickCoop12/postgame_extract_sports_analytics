@@ -9,5 +9,5 @@ tiktoken
 s3fs
 amazon-textract-textractor
 pdf2image
-poppler
-poppler-utils
+python-poppler
+
