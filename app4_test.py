@@ -117,7 +117,8 @@ if file_upload is not None:
     features=[TextractFeatures.TABLES],
     save_image=True
     )
-    
+
+    x = document.export_tables_to_excel("download.xlsx")
     
     retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     with open(file_upload.name, mode='wb') as w:
@@ -141,7 +142,7 @@ if file_upload is not None:
         st.sidebar.download_button('download Scan', file_upload, file_name=file_upload.name)
 
     if option == 'As Excel':
-        st.sidebar.download_button('download excel', document.export_tables_to_excel("download.xlsx"), file_name = 'download.xlsx')
+        st.sidebar.download_button('download excel', x, file_name = 'download.xlsx')
 # Scanner tool implementation
 
 
