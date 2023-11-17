@@ -12,6 +12,9 @@ import os
 __import__('pysqlite3')
 import sys
 
+#test
+os.environ['AWS_ACCESS_KEY_ID'] = 'AKIASF2P7IDFKIGWFHIU'
+os.environ['AWS_SECRET_ACCESS_KEY'] = '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'
 
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
@@ -21,6 +24,8 @@ OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 # Initializing textract API
 
 textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id='AKIASF2P7IDFKIGWFHIU',aws_secret_access_key='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')
+#test
+extractor = Textractor(region_name="us-east-1", kms_key_id= '4b28ef85-000d-44e3-9210-cca4c06af170')
 
 # Creating
 def document_to_retriever(document, chunk_size, chunk_overlap):
@@ -101,6 +106,15 @@ if file_upload is not None:
 # Retriever and word extraction
     with open(file_upload.name,"wb") as f: 
       f.write(file_upload.getbuffer())
+
+    #test
+    document = extractor.analyze_document(
+    file_source=file_upload.name,
+    features=[TextractFeatures.TABLES],
+    save_image=True
+    )
+    
+    
     
     retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     with open(file_upload.name, mode='wb') as w:
