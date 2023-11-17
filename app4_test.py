@@ -142,7 +142,7 @@ if file_upload is not None:
         st.sidebar.download_button('download Scan', file_upload, file_name=file_upload.name)
 
     if option == 'As Excel':
-        st.sidebar.download_button('download excel', 'download.xlsx", file_name = 'download.xlsx')
+        st.sidebar.download_button('download excel', 'download.xlsx', file_name = 'download.xlsx')
 # Scanner tool implementation
 
 
