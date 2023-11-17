@@ -9,7 +9,5 @@ pysqlite3-binary
 tiktoken
 s3fs
 amazon-textract-textractor
-pdf2image
-poppler-utils
-pdf-info
+
 
