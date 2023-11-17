@@ -11,4 +11,4 @@ amazon-textract-textractor
 pdf2image
 poppler-utils
 pdf-info
-
+scikit-learn
