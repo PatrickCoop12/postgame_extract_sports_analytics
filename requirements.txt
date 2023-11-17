@@ -11,6 +11,6 @@ s3fs
 amazon-textract-textractor
 pdf2image
 poppler-utils
-
+io
 
 
