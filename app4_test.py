@@ -175,7 +175,7 @@ if file_upload is not None:
             with st.chat_message("assistant"):
                 #message_placeholder = st.empty()
                 #full_response = ""
-                response = generate_response(retriever, prompt)
+                response = generate_response(prompt)
                 st.markdown(response)
                 #for response in response:
                     #full_response += response
