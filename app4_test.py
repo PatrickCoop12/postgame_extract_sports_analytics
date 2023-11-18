@@ -27,7 +27,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 # Initializing textract API
-retriever = " "
+
 textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id=st.secrets['AWS_ACCESS_KEY_ID'],aws_secret_access_key=st.secrets['AWS_SECRET_ACCESS_KEY'])
 # Initializing extractor
 extractor = Textractor(region_name="us-east-1", kms_key_id= '4b28ef85-000d-44e3-9210-cca4c06af170')
