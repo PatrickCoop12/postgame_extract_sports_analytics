@@ -156,34 +156,33 @@ if file_upload is not None:
     #st.write(text_export)
 
 # extracting text from image and formatting into a retriever for our LLM
-
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
 
     chat_history = []
 
 # Chat configuration and setup
 
-    if prompt := st.chat_input("Ask me about the repository!"):
+if prompt := st.chat_input("Ask me about the repository!"):
     #st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-            st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.spinner("Generating an answer..."):
-            with st.chat_message("assistant"):
+    with st.chat_message("user"):
+        st.markdown(prompt)
+        st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.spinner("Generating an answer..."):
+        with st.chat_message("assistant"):
                 #message_placeholder = st.empty()
                 #full_response = ""
-                response = generate_response(prompt)
-                st.markdown(response)
+            response = generate_response(prompt)
+            st.markdown(response)
                 #for response in response:
                     #full_response += response
                     #message_placeholder.markdown(full_response + "▌")
                 #message_placeholder.markdown(full_response)
-                st.session_state.messages.append(
-                    {"role": "assistant", "content": response}
-                )
+            st.session_state.messages.append(
+                {"role": "assistant", "content": response}
+            )
 
 #if prompt := st.chat_input(placeholder="What would you like to know?"):
 #   st.session_state.messages.append({"role": "user", "content": prompt})
