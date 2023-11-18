@@ -10,6 +10,5 @@ tiktoken
 s3fs
 amazon-textract-textractor
 pdf2image
-io
 
 
