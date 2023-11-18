@@ -70,7 +70,11 @@ if "memory" not in st.session_state:
     #st.session_state.retriever = " "
 
 
-def generate_response(input_text):
+def generate_response(retriever, input_text):
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4-1106-preview", temperature=0,
+                                                          openai_api_key=OPENAI_API_KEY),
+                                               retriever=retriever, verbose=True, memory=st.session_state.memory)
     result = qa({"chat_history": chat_history, "question":input_text})
     return result['answer']
 
@@ -125,9 +129,7 @@ if file_upload is not None:
     
     retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-    qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4-1106-preview", temperature=0,
-                                                          openai_api_key=OPENAI_API_KEY),
-                                               retriever=retriever, verbose=True, memory=memory)
+    
     with open(file_upload.name, mode='wb') as w:
         w.write(file_upload.getvalue())
     if '.pdf' not in file_upload.name:
@@ -174,7 +176,7 @@ if prompt := st.chat_input("Ask me about the repository!"):
         with st.chat_message("assistant"):
                 #message_placeholder = st.empty()
                 #full_response = ""
-            response = generate_response(prompt)
+            response = generate_response(retriever, prompt)
             st.markdown(response)
                 #for response in response:
                     #full_response += response
