@@ -60,14 +60,14 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
     retriever = vectorstore.as_retriever()
 
 
-    return st.session_state.retriever, words
+    return retriever, words
 
 
 if "memory" not in st.session_state:
     st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-if "retriever" not in st.session_state:
-    st.session_state.retriever = " "
+#if "retriever" not in st.session_state:
+    #st.session_state.retriever = " "
 
 
 def generate_response(retriever, input_text):
@@ -127,7 +127,7 @@ if file_upload is not None:
     with open('download.xlsx', "rb") as fh:
         buffer = io.BytesIO(fh.read())
     
-    st.session_state.retriever, words = document_to_retriever(file_upload.name, 4000, 2)
+    retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     with open(file_upload.name, mode='wb') as w:
         w.write(file_upload.getvalue())
     if '.pdf' not in file_upload.name:
@@ -175,7 +175,7 @@ if file_upload is not None:
             with st.chat_message("assistant"):
                 #message_placeholder = st.empty()
                 #full_response = ""
-                response = generate_response(st.session_state.retriever, prompt)
+                response = generate_response(retriever, prompt)
                 st.markdown(response)
                 #for response in response:
                     #full_response += response
