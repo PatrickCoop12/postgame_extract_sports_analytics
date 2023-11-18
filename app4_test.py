@@ -70,7 +70,7 @@ if "retriever" not in st.session_state:
     st.session_state.retriever = " "
 
 
-def generate_response(st.session_state.retriever, input_text):
+def generate_response(retriever, input_text):
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4-1106-preview", temperature=0,
                                                           openai_api_key=OPENAI_API_KEY),
