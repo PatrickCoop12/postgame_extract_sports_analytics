@@ -64,7 +64,7 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
 
 
 if "memory" not in st.session_state:
-    st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+    st.session_state['memory'] = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
 #if "retriever" not in st.session_state:
     #st.session_state.retriever = " "
