@@ -9,7 +9,6 @@ from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from pathlib import Path
 import os
-import io
 __import__('pysqlite3')
 import sys
 from textractor import Textractor
