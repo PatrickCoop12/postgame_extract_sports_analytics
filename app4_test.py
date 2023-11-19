@@ -191,7 +191,7 @@ if prompt := st.chat_input("Ask me about the repository!"):
             st.session_state.messages.append(
                 {"role": "assistant", "content": response}
             )
-
+vectorstore.delete(vectorstore.get()['ids'])
 #if prompt := st.chat_input(placeholder="What would you like to know?"):
 #   st.session_state.messages.append({"role": "user", "content": prompt})
 #    st.chat_message("user").write(prompt)
