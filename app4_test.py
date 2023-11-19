@@ -60,7 +60,7 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
     retriever = vectorstore.as_retriever()
 
 
-    return retriever, words
+    return vectorstore, retriever, words
 
 
 if "memory" not in st.session_state:
@@ -111,6 +111,12 @@ if "messages" not in st.session_state:
 # File upload conditional to limits code execution until after file has been uploaded. Code executed is display of
 # image, but you may adjust as needed.
 if file_upload is not None:
+    
+    try:
+        vectorstore.delete(vectorstore.get()['ids'])
+    except:
+        pass
+        
     st.markdown('#### Chatbot')
 # Retriever and word extraction
     with open(file_upload.name,"wb") as f: 
@@ -127,7 +133,7 @@ if file_upload is not None:
     with open('download.xlsx', "rb") as fh:
         buffer = io.BytesIO(fh.read())
     
-    retriever, words = document_to_retriever(file_upload.name, 4000, 2)
+    vectorstore, retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     
     with open(file_upload.name, mode='wb') as w:
