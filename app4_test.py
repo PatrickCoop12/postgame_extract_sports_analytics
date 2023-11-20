@@ -82,16 +82,16 @@ def generate_response(retriever, input_text):
 st.set_page_config(page_title="PostGame Extract", page_icon=":tada:", layout="wide")
 st.title(":blue[Post]:red[Game] Extract")
 st.subheader('The Sports Administration Document Interaction and Analysis Tool', divider='red')
-st.markdown(
-"""
-#### Getting Started:
-- Use the file uploader to upload an image to get stared.
-- Upon upload an interactive chat will appear below. You may use the chat to ask specific questions about the document
-  (the tool currently only supports single page uploads).
-- Two download options will also appear in the left sidebar allowing you to export images of handwritten documents as scanned pdfs. Text extracted 
-  from the image is also available for export in .txt format. 
-"""
-)
+with st.expander('Getting Started')    
+    st.markdown(
+    """
+    - Use the file uploader to upload an image to get stared.
+    - Upon upload an interactive chat will appear below. You may use the chat to ask specific questions about the document
+      (the tool currently only supports single page uploads).
+    - Two download options will also appear in the left sidebar allowing you to export images of handwritten documents as scanned pdfs. Text extracted 
+      from the image is also available for export in .txt format. 
+    """
+    )
 st.subheader('', divider='blue')
 
 
