@@ -82,7 +82,7 @@ def generate_response(retriever, input_text):
 st.set_page_config(page_title="PostGame Extract", page_icon=":tada:", layout="wide")
 st.title(":blue[Post]:red[Game] Extract")
 st.subheader('The Sports Administration Document Interaction and Analysis Tool', divider='red')
-with st.expander('Getting Started'):    
+with st.expander('Instructions'):    
     st.markdown(
     """
     - Use the file uploader to upload an image to get stared.
