@@ -193,7 +193,7 @@ with st.expander('Instructions'):
     st.markdown(
     """
     #### Getting Started
-    - To get started with the app, please use the file uploader to upload an image of a document or pdf
+    - To get started with the app, please use the file uploader to upload an image of a document or pdf     
     (the tool currently only supports single page uploads).
     - Upon upload of your file:
       - An interactive chat will appear below. You may use the chat to ask specific questions about the document.
