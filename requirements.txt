@@ -13,5 +13,5 @@ pdf2image
 numpy
 opencv-python
 imutils
-skimage
+scikit-image
 
