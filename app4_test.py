@@ -207,7 +207,7 @@ with st.expander('Instructions'):
       - For PDF Files
         - Raw Text Extraction
         - Table Extractor to Excel 
-    ####### *please note
+    ###### *please note scan conversion is only available for image files uploaded, and not available for PDFs.
     """
     )
 st.subheader('', divider='blue')
