@@ -207,7 +207,7 @@ with st.expander('Instructions'):
       - For PDF Files
         - Raw Text Extraction
         - Table Extractor to Excel 
-    ##### *please note
+    ###### *please note
     """
     )
 st.subheader('', divider='blue')
