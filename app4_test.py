@@ -195,15 +195,19 @@ with st.expander('Instructions'):
     #### Getting Started
     - To get started with the app, please use the file uploader to upload an image of a document or pdf
     (the tool currently only supports single page uploads).
-    - Upon upload an interactive chat will appear below. You may use the chat to ask specific questions about the document.
+    - Upon upload of your file:
+      - An interactive chat will appear below. You may use the chat to ask specific questions about the document.
+      - An image of the file will be available for view
+      - Several export options will be made available by selecting an option from the drop-down on the left. After export is generated, please click the download button.
     - Export Options: 
       - For Image Files (jpg, jpeg, png) 
         - Raw Text Extraction
-        - Converted Scanned Image (converts raw image of document into a digital scan). Best used for handwritten notes, and printed templates and forms containing handwriting.
+        - Converted Scanned Image* (converts raw image of document into a digital scan). Best used for handwritten notes, and printed templates and forms containing handwriting.
+        - Table Extractor to Excel (PDFs containing tabular data can be automatically converted to excel for further analysis)
       - For PDF Files
         - Raw Text Extraction
-        - Table Extractor to Excel (PDFs containing tabular data can be automatically converted to excel for further analysis)*
-    ########*Table extractor currently only supports 
+        - Table Extractor to Excel 
+    ##### *please note
     """
     )
 st.subheader('', divider='blue')
