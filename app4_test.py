@@ -229,11 +229,11 @@ if file_upload is not None:
         pass
         
     st.markdown('#### Chatbot')
-# Retriever and word extraction
+    # Temporary file saving
     with open(file_upload.name,"wb") as f: 
       f.write(file_upload.getbuffer())
 
-    #test
+    # Table extraction for pdf documents
     document = extractor.analyze_document(
     file_source=file_upload.name,
     features=[TextractFeatures.TABLES],
@@ -254,33 +254,34 @@ if file_upload is not None:
         st.sidebar.image(file_upload.name, use_column_width=True)
         #right_column.image(image, caption='menu',use_column_width=True)
 
-# Taking extracted words and making them available for download
-# PDF Scan conversion
+        # Taking extracted words and making them available for download
+        # PDF Scan conversion
     option = st.sidebar.selectbox(
         'Export',
         ('Select', 'As .txt File','As Scan', 'As Excel')
     )
+            # Extracted words export as .txt file
     if option == 'As .txt File':
         text_export = words
         st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
-
+            # converted scan image export 
     if option == 'As Scan':
         try:
             scan_transformation(file_upload.name)
             with open('scan.png', "rb") as f:
                 scan = io.BytesIO(f.read())
-            # add in scan conversion 
+            # exception raised if there is an error in converting document image to scan. Likely due to an error detecting corners/edges in document
+            # user will be asked to take a better image with a contrasting background.
         except:
             st.warning('Please place document for scan conversion on surface with a greater contrast (i.e. a dark table surface)')
         st.sidebar.download_button('download Scan', scan, file_name='scan.png')
+        # table extraction export into excel file
     if option == 'As Excel':
         st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
-# Scanner tool implementation
 
 
-    #st.write(text_export)
 
-# extracting text from image and formatting into a retriever for our LLM
+
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -288,7 +289,7 @@ if file_upload is not None:
 
     chat_history = []
 
-# Chat configuration and setup
+        # Chat configuration and setup
 
     if prompt := st.chat_input("Ask me about the repository!"):
     #st.session_state.messages.append({"role": "user", "content": prompt})
@@ -308,26 +309,8 @@ if file_upload is not None:
                 st.session_state.messages.append(
                     {"role": "assistant", "content": response}
                 )
+    
+    # Deleting all items from vectorstore to avoid document hallucination/confusion
     vectorstore.delete(vectorstore.get()['ids'])
-#if prompt := st.chat_input(placeholder="What would you like to know?"):
-#   st.session_state.messages.append({"role": "user", "content": prompt})
-#    st.chat_message("user").write(prompt)
-#    response = generate_response(retriever, prompt)
-#    msg = response
-#    st.session_state.messages.append(msg)
-#    st.chat_message("assistant").write(msg)
-
-
-
-#with st.chat_message("assistant"):
-#    response = generate_response(retriever,st.session_state.messages)
-#    st.session_state.messages.append({"role": "assistant", "content": response})
-#    st.write(response)
-
-#with st.chat_message('my_form'):
-#    text = st.text_area('Enter text:', 'What are the three key pieces of advice for learning how to code?')
-
-#    if submitted:
-#        generate_response(retriever,text)
 
 
