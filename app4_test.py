@@ -197,8 +197,13 @@ with st.expander('Instructions'):
     (the tool currently only supports single page uploads).
     - Upon upload an interactive chat will appear below. You may use the chat to ask specific questions about the document.
     - Export Options: 
-      - Image Files
-        - Two download options will also appear in the left sidebar allowing you to export images of handwritten documents as scanned pdfs. Text extracted from the image is also available for export in .txt format. 
+      - For Image Files (jpg, jpeg, png) 
+        - Raw Text Extraction
+        - Converted Scanned Image (converts raw image of document into a digital scan). Best used for handwritten notes, and printed templates and forms containing handwriting.
+      - For PDF Files
+        - Raw Text Extraction
+        - Table Extractor to Excel (PDFs containing tabular data can be automatically converted to excel for further analysis)*
+    
     """
     )
 st.subheader('', divider='blue')
