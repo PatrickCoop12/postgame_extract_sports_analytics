@@ -12,9 +12,17 @@ import os
 import io
 __import__('pysqlite3')
 import sys
+import numpy as np
+import cv2
+import imutils
+from skimage.filters import threshold_local
 from textractor import Textractor
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
+
+
+
+
 
 #Calling required API keys from secrets
 os.environ['AWS_ACCESS_KEY_ID'] = st.secrets['AWS_ACCESS_KEY_ID']
@@ -32,7 +40,8 @@ textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id=s
 # Initializing extractor
 extractor = Textractor(region_name="us-east-1", kms_key_id= '4b28ef85-000d-44e3-9210-cca4c06af170')
 
-# Creating
+# Creating functions needed for workflow execution:
+# Text Extraction
 def document_to_retriever(document, chunk_size, chunk_overlap):
     with open(document, 'rb') as file:
         img = file.read()
@@ -63,13 +72,7 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
     return vectorstore, retriever, words
 
 
-if "memory" not in st.session_state:
-    st.session_state['memory'] = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-
-#if "retriever" not in st.session_state:
-    #st.session_state.retriever = " "
-
-
+# Response generation function
 def generate_response(retriever, input_text):
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4-1106-preview", temperature=0,
@@ -78,6 +81,110 @@ def generate_response(retriever, input_text):
     result = qa({"chat_history": chat_history, "question":input_text})
     return result['answer']
 
+# Scan tool functions
+# Point ordering function used in perspective transform fucntion
+def order_points(pts):
+   # initializing the list of coordinates to be ordered
+   rect = np.zeros((4, 2), dtype = "float32")
+
+   s = pts.sum(axis = 1)
+
+   # top-left point will have the smallest sum
+   rect[0] = pts[np.argmin(s)]
+
+   # bottom-right point will have the largest sum
+   rect[2] = pts[np.argmax(s)]
+
+   '''computing the difference between the points, the
+   top-right point will have the smallest difference,
+   whereas the bottom-left will have the largest difference'''
+   diff = np.diff(pts, axis = 1)
+   rect[1] = pts[np.argmin(diff)]
+   rect[3] = pts[np.argmax(diff)]
+
+   # returns ordered coordinates
+   return rect
+
+# Perspective transform Function
+def perspective_transform(image, pts):
+   # unpack the ordered coordinates individually
+   rect = order_points(pts)
+   (tl, tr, br, bl) = rect
+
+   '''compute the width of the new image, which will be the
+   maximum distance between bottom-right and bottom-left
+   x-coordinates or the top-right and top-left x-coordinates'''
+   widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
+   widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
+   maxWidth = max(int(widthA), int(widthB))
+
+   '''compute the height of the new image, which will be the
+   maximum distance between the top-left and bottom-left y-coordinates'''
+   heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
+   heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
+   maxHeight = max(int(heightA), int(heightB))
+
+   '''construct the set of destination points to obtain an overhead shot'''
+   dst = np.array([
+      [0, 0],
+      [maxWidth - 1, 0],
+      [maxWidth - 1, maxHeight - 1],
+      [0, maxHeight - 1]], dtype = "float32")
+
+   # compute the perspective transform matrix
+   transform_matrix = cv2.getPerspectiveTransform(rect, dst)
+
+   # Apply the transform matrix
+   warped = cv2.warpPerspective(image, transform_matrix, (maxWidth, maxHeight))
+
+   # return the warped image
+   return warped
+
+
+# Scan conversion function that utilizes two functions above
+def scan_transformation(document_image):
+    original_img = cv2.imread(document_image)
+    copy = original_img.copy()
+
+# The resized height in hundreds
+    ratio = original_img.shape[0] / 500.0
+    img_resize = imutils.resize(original_img, height=500)
+
+    gray_image = cv2.cvtColor(img_resize, cv2.COLOR_BGR2GRAY)
+
+    blurred_image = cv2.GaussianBlur(gray_image, (5, 5), 0)
+
+
+    edged_img = cv2.Canny(blurred_image, 75, 200)
+    cnts, _ = cv2.findContours(edged_img, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
+
+    for c in cnts:
+        peri = cv2.arcLength(c, True)
+        approx = cv2.approxPolyDP(c, 0.02 * peri, True)
+
+        if len(approx) == 4:
+            doc = approx
+            break
+
+
+    p = []
+
+    for d in doc:
+        tuple_point = tuple(d[0])
+        cv2.circle(img_resize, tuple_point, 3, (0, 0, 255), 4)
+        p.append(tuple_point)
+
+
+    warped_image = perspective_transform(copy, doc.reshape(4, 2) * ratio)
+    warped_image = cv2.cvtColor(warped_image, cv2.COLOR_BGR2GRAY)
+
+    T = threshold_local(warped_image, 11, offset=10, method="gaussian")
+    warped = (warped_image > T).astype("uint8") * 255
+
+    return cv2.imwrite('./'+'scan'+'.png',warped)
+
+# Page configurations and setup
 
 st.set_page_config(page_title="PostGame Extract", page_icon=":tada:", layout="wide")
 st.title(":blue[Post]:red[Game] Extract")
@@ -102,6 +209,9 @@ st.sidebar.markdown('This app has been designed to allow users the ability to ca
 file_upload = st.sidebar.file_uploader("Please Upload a File", type=['png','jpeg', 'jpg', 'pdf'])
 
 # Initializing messages in the session state for call back to chat history during chat session
+if "memory" not in st.session_state:
+    st.session_state['memory'] = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
@@ -155,8 +265,14 @@ if file_upload is not None:
         st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
 
     if option == 'As Scan':
-        st.sidebar.download_button('download Scan', file_upload, file_name=file_upload.name)
-
+        try:
+            scan_transformation(file_upload.name)
+            with open('scan.png', "rb") as f:
+                scan = io.BytesIO(f.read())
+            # add in scan conversion 
+        except:
+            st.warning('Please place document for scan conversion on surface with a greater contrast (i.e. a dark table surface)')
+        st.sidebar.download_button('download Scan', scan, file_name='scan.png')
     if option == 'As Excel':
         st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
 # Scanner tool implementation
