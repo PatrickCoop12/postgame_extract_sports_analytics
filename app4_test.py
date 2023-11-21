@@ -216,7 +216,7 @@ st.subheader('', divider='blue')
 left_column, right_column = st.columns(2)
 st.sidebar.markdown('### About')
 st.sidebar.markdown('This app has been designed to allow users the ability to capture a photo of a variety of documents relating to sports. These documents may include anything from boxscores, play-by-play sheets, and even handwritten notes. PDF files are also supported.')
-file_upload = st.sidebar.file_uploader("Please Upload a File", type=['png','jpeg', 'jpg', 'pdf'])
+file_upload = st.sidebar.file_uploader("Please Upload a File", type=['jpg','jpeg','png', 'pdf'])
 
 # Initializing messages in the session state for call back to chat history during chat session
 if "memory" not in st.session_state:
