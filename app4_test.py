@@ -193,9 +193,9 @@ with st.expander('Instructions'):
     st.markdown(
     """
     #### Getting Started
-    1 To get started with the app, please use the file uploader to upload an image of a document or pdf     
+    1. To get started with the app, please use the file uploader to upload an image of a document or pdf     
     (the tool currently only supports single page uploads).
-    2 Upon upload of your file:
+    2. Upon upload of your file:
       - An interactive chat will appear below. You may use the chat to ask specific questions about the document.
       - An image of the file will be available for view
       - Several export options will be made available by selecting an option from the drop-down on the left. After export is generated, please click the download button.
