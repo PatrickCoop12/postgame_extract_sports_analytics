@@ -193,10 +193,11 @@ with st.expander('Instructions'):
     st.markdown(
     """
     #### Getting Started
-    - Use the file uploader to upload an image to get stared.
-    - Upon upload an interactive chat will appear below. You may use the chat to ask specific questions about the document
-      (the tool currently only supports single page uploads).
-    - Two download options will also appear in the left sidebar allowing you to export images of handwritten documents as scanned pdfs. Text extracted 
+    - To get started with the app, please use the file uploader to upload an image of a document or pdf
+    (the tool currently only supports single page uploads).
+    - Upon upload an interactive chat will appear below. You may use the chat to ask specific questions about the document.
+    - Export Options: 
+        Two download options will also appear in the left sidebar allowing you to export images of handwritten documents as scanned pdfs. Text extracted 
       from the image is also available for export in .txt format. 
     """
     )
