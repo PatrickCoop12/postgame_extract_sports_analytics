@@ -203,7 +203,7 @@ with st.expander('Instructions'):
       - For PDF Files
         - Raw Text Extraction
         - Table Extractor to Excel (PDFs containing tabular data can be automatically converted to excel for further analysis)*
-    
+    ########*Table extractor currently only supports 
     """
     )
 st.subheader('', divider='blue')
