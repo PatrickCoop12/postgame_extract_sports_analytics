@@ -259,35 +259,48 @@ if file_upload is not None:
     
     with open(file_upload.name, mode='wb') as w:
         w.write(file_upload.getvalue())
-    if '.pdf' not in file_upload.name:
+
+    if '.pdf' in file_upload.name:
+        option = st.sidebar.selectbox(
+            'Export',
+            ('Select', 'As .txt File', 'As Excel')
+            )
+            # Extracted words export as .txt file
+        if option == 'As .txt File':
+            text_export = words
+            st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
+        # table extraction export into excel file
+        if option == 'As Excel':
+            st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
+    elif '.pdf' not in file_upload.name:
         image = Image.open(file_upload.name)
         st.sidebar.image(file_upload.name, use_column_width=True)
         #right_column.image(image, caption='menu',use_column_width=True)
 
         # Taking extracted words and making them available for download
         # PDF Scan conversion
-    option = st.sidebar.selectbox(
-        'Export',
-        ('Select', 'As .txt File','As Scan', 'As Excel')
-    )
+        option = st.sidebar.selectbox(
+            'Export',
+            ('Select', 'As .txt File','As Scan', 'As Excel')
+        )
             # Extracted words export as .txt file
-    if option == 'As .txt File':
-        text_export = words
-        st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
+        if option == 'As .txt File':
+            text_export = words
+            st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
             # converted scan image export 
-    if option == 'As Scan':
-        try:
-            scan_transformation(file_upload.name)
-            with open('scan.png', "rb") as f:
-                scan = io.BytesIO(f.read())
+        if option == 'As Scan':
+            try:
+                scan_transformation(file_upload.name)
+                with open('scan.png', "rb") as f:
+                    scan = io.BytesIO(f.read())
             # exception raised if there is an error in converting document image to scan. Likely due to an error detecting corners/edges in document
             # user will be asked to take a better image with a contrasting background.
-        except:
-            st.warning('Please place document for scan conversion on surface with a greater contrast (i.e. a dark table surface)')
-        st.sidebar.download_button('download Scan', scan, file_name='scan.png')
+            except:
+                st.warning('Please place document for scan conversion on surface with a greater contrast (i.e. a dark table surface)')
+            st.sidebar.download_button('download Scan', scan, file_name='scan.png')
         # table extraction export into excel file
-    if option == 'As Excel':
-        st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
+        if option == 'As Excel':
+            st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
 
 
 
