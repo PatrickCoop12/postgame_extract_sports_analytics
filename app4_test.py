@@ -24,20 +24,18 @@ from textractor.data.constants import TextractFeatures, Direction, DirectionalFi
 
 
 
-#Calling required API keys from secrets
+# Calling required API keys from streamlit secrets
 os.environ['AWS_ACCESS_KEY_ID'] = st.secrets['AWS_ACCESS_KEY_ID']
 os.environ['AWS_SECRET_ACCESS_KEY'] = st.secrets['AWS_SECRET_ACCESS_KEY']
 OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 
-#Required for chromadb module to function
+# Required reassignment of built in sqlite3 modules in order for chromadb module to function
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 
 
-# Initializing textract API
-
+# Initializing extraction tools
 textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id=st.secrets['AWS_ACCESS_KEY_ID'],aws_secret_access_key=st.secrets['AWS_SECRET_ACCESS_KEY'])
-# Initializing extractor
 extractor = Textractor(region_name="us-east-1", kms_key_id= '4b28ef85-000d-44e3-9210-cca4c06af170')
 
 # Creating functions needed for workflow execution:
@@ -220,7 +218,7 @@ st.sidebar.markdown('### About')
 st.sidebar.markdown('This app has been designed to allow users the ability to capture a photo of a variety of documents relating to sports. These documents may include anything from boxscores, play-by-play sheets, and even handwritten notes. PDF files are also supported.')
 file_upload = st.sidebar.file_uploader("Please Upload a File", type=['jpg','jpeg','png', 'pdf'])
 
-# Initializing messages in the session state for call back to chat history during chat session
+# Initializing messages and memory in the session state for call back to chat history during chat session
 if "memory" not in st.session_state:
     st.session_state['memory'] = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
@@ -231,8 +229,8 @@ if "messages" not in st.session_state:
     #with st.chat_message(message["role"]):
         #st.markdown(message["content"])
 
-# File upload conditional to limits code execution until after file has been uploaded. Code executed is display of
-# image, but you may adjust as needed.
+# File upload conditional to limit further code execution until after file has been uploaded.
+
 if file_upload is not None:
     
     try:
@@ -316,7 +314,7 @@ if file_upload is not None:
 
         # Chat configuration and setup
 
-    if prompt := st.chat_input("Ask me about the repository!"):
+    if prompt := st.chat_input("Ask me a question about your document!"):
     #st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
