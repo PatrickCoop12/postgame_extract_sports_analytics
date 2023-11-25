@@ -194,7 +194,7 @@ with st.expander('Instructions'):
     1. To get started with the app, please use the file uploader to upload an image of a document or pdf     
     (the tool currently only supports single page uploads).
       * If the sidebar containing the file uploader is not showing, please click the arrow in the top left corner 
-        (on mobile you may have to scroll up)
+                     (on mobile you may have to scroll up)
     2. Upon upload of your file:
       * An interactive chat will appear below. You may use the chat to ask specific questions about the document.
       * An image of the file will be available for view
