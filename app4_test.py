@@ -229,7 +229,7 @@ if "messages" not in st.session_state:
     #with st.chat_message(message["role"]):
         #st.markdown(message["content"])
 
-# File upload conditional to limit further code execution until after file has been uploaded.
+# If statement used to check for file upload to limit further code execution until after file has been uploaded.
 
 if file_upload is not None:
     
@@ -243,16 +243,16 @@ if file_upload is not None:
     with open(file_upload.name,"wb") as f: 
       f.write(file_upload.getbuffer())
 
-    # Table extraction for pdf documents
-    document = extractor.analyze_document(
-    file_source=file_upload.name,
-    features=[TextractFeatures.TABLES],
-    save_image=True
-    )
+    # Table extraction
+    #document = extractor.analyze_document(
+    #file_source=file_upload.name,
+    #features=[TextractFeatures.TABLES],
+    #save_image=True
+    #)
 
-    document.export_tables_to_excel("download.xlsx")
-    with open('download.xlsx', "rb") as fh:
-        buffer = io.BytesIO(fh.read())
+    #document.export_tables_to_excel("download.xlsx")
+    #with open('download.xlsx', "rb") as fh:
+        #buffer = io.BytesIO(fh.read())
     
     vectorstore, retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -265,12 +265,21 @@ if file_upload is not None:
             'Export',
             ('Select', 'As .txt File', 'As Excel')
             )
-            # Extracted words export as .txt file
+        # Extracted words export as .txt file
         if option == 'As .txt File':
             text_export = words
             st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
         # table extraction export into excel file
         if option == 'As Excel':
+            document = extractor.analyze_document(
+                file_source=file_upload.name,
+                features=[TextractFeatures.TABLES],
+                save_image=True
+                )
+
+            document.export_tables_to_excel("download.xlsx")
+            with open('download.xlsx', "rb") as fh:
+                buffer = io.BytesIO(fh.read())
             st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
     elif '.pdf' not in file_upload.name:
         image = Image.open(file_upload.name)
@@ -283,23 +292,32 @@ if file_upload is not None:
             'Export',
             ('Select', 'As .txt File','As Scan', 'As Excel')
         )
-            # Extracted words export as .txt file
+        # Extracted words export as .txt file
         if option == 'As .txt File':
             text_export = words
             st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
-            # converted scan image export 
+        # converted scan image export 
         if option == 'As Scan':
             try:
                 scan_transformation(file_upload.name)
                 with open('scan.png', "rb") as f:
                     scan = io.BytesIO(f.read())
-            # exception raised if there is an error in converting document image to scan. Likely due to an error detecting corners/edges in document
-            # user will be asked to take a better image with a contrasting background.
+        # exception raised if there is an error in converting document image to scan. Likely due to an error detecting corners/edges in document
+        # user will be asked to take a better image with a contrasting background.
             except:
                 st.warning('Please place document for scan conversion on surface with a greater contrast (i.e. a dark table surface)')
             st.sidebar.download_button('download Scan', scan, file_name='scan.png')
         # table extraction export into excel file
         if option == 'As Excel':
+            document = extractor.analyze_document(
+                file_source=file_upload.name,
+                features=[TextractFeatures.TABLES],
+                save_image=True
+                )
+
+            document.export_tables_to_excel("download.xlsx")
+            with open('download.xlsx', "rb") as fh:
+                buffer = io.BytesIO(fh.read())
             st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
 
 
@@ -315,7 +333,7 @@ if file_upload is not None:
         # Chat configuration and setup
 
     if prompt := st.chat_input("Ask me a question about your document!"):
-    #st.session_state.messages.append({"role": "user", "content": prompt})
+        #st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
             st.session_state.messages.append({"role": "user", "content": prompt})
