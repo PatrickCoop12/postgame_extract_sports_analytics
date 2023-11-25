@@ -20,10 +20,6 @@ from textractor import Textractor
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 
-
-
-
-
 # Calling required API keys from streamlit secrets
 os.environ['AWS_ACCESS_KEY_ID'] = st.secrets['AWS_ACCESS_KEY_ID']
 os.environ['AWS_SECRET_ACCESS_KEY'] = st.secrets['AWS_SECRET_ACCESS_KEY']
@@ -31,8 +27,6 @@ OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 
 # Required reassignment of built in sqlite3 modules in order for chromadb module to function
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
-
 
 # Initializing extraction tools
 textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id=st.secrets['AWS_ACCESS_KEY_ID'],aws_secret_access_key=st.secrets['AWS_SECRET_ACCESS_KEY'])
@@ -46,7 +40,6 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
         bytes = bytearray(img)
 
     extracted_text = textract.analyze_document(Document = {'Bytes': bytes}, FeatureTypes = ['TABLES'])
-
 
     text = []
     blocks = extracted_text['Blocks']
@@ -200,7 +193,7 @@ with st.expander('Instructions'):
       * An image of the file will be available for view
       * Several export options will be made available by selecting an option from the drop-down on the left. After export is generated, please click the download button.
     - Export Options: 
-      - For Image Files (jpg, jpeg, png) 
+      - For Image Files (.jpg, .jpeg, .png) 
         - Raw Text Extraction
         - Converted Scanned Image* (converts raw image of document into a digital scan). Best used for handwritten notes, and printed templates and forms containing handwriting.
         - Table Extractor to Excel (PDFs containing tabular data can be automatically converted to excel for further analysis)
@@ -242,17 +235,6 @@ if file_upload is not None:
     # Temporary file saving
     with open(file_upload.name,"wb") as f: 
       f.write(file_upload.getbuffer())
-
-    # Table extraction
-    #document = extractor.analyze_document(
-    #file_source=file_upload.name,
-    #features=[TextractFeatures.TABLES],
-    #save_image=True
-    #)
-
-    #document.export_tables_to_excel("download.xlsx")
-    #with open('download.xlsx', "rb") as fh:
-        #buffer = io.BytesIO(fh.read())
     
     vectorstore, retriever, words = document_to_retriever(file_upload.name, 4000, 2)
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
@@ -269,7 +251,7 @@ if file_upload is not None:
         if option == 'As .txt File':
             text_export = words
             st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
-        # table extraction export into excel file
+        # Table extraction export into excel file
         if option == 'As Excel':
             document = extractor.analyze_document(
                 file_source=file_upload.name,
@@ -286,28 +268,26 @@ if file_upload is not None:
         st.sidebar.image(file_upload.name, use_column_width=True)
         #right_column.image(image, caption='menu',use_column_width=True)
 
-        # Taking extracted words and making them available for download
-        # PDF Scan conversion
         option = st.sidebar.selectbox(
             'Export',
             ('Select', 'As .txt File','As Scan', 'As Excel')
         )
-        # Extracted words export as .txt file
+    # Extracted words export as .txt file
         if option == 'As .txt File':
             text_export = words
             st.sidebar.download_button('download extracted text', text_export, file_name='extracted_text.txt')
-        # converted scan image export 
+    # Converted scan image export 
         if option == 'As Scan':
             try:
                 scan_transformation(file_upload.name)
                 with open('scan.png', "rb") as f:
                     scan = io.BytesIO(f.read())
-        # exception raised if there is an error in converting document image to scan. Likely due to an error detecting corners/edges in document
-        # user will be asked to take a better image with a contrasting background.
+    # Exception raised if there is an error in converting document image to scan. Likely due to an error detecting corners/edges in document
+    # User will be asked to take a better image with a contrasting background.
             except:
                 st.warning('Please place document for scan conversion on surface with a greater contrast (i.e. a dark table surface)')
             st.sidebar.download_button('download Scan', scan, file_name='scan.png')
-        # table extraction export into excel file
+    # Table extraction export into excel file
         if option == 'As Excel':
             document = extractor.analyze_document(
                 file_source=file_upload.name,
@@ -321,8 +301,6 @@ if file_upload is not None:
             st.sidebar.download_button('download excel', buffer, file_name = 'download.xlsx')
 
 
-
-
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
@@ -330,7 +308,7 @@ if file_upload is not None:
 
     chat_history = []
 
-        # Chat configuration and setup
+    # Chat configuration and setup
 
     if prompt := st.chat_input("Ask me a question about your document!"):
         #st.session_state.messages.append({"role": "user", "content": prompt})
