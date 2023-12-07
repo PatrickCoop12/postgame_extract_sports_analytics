@@ -179,7 +179,7 @@ def scan_transformation(document_image):
 
 st.set_page_config(page_title="PostGame Extract", page_icon=":tada:", layout="wide")
 st.title(":blue[Post]:red[Game] Extract")
-st.subheader('The Sports Administration Document Interaction and Analysis Tool', divider='red')
+st.subheader('Interactive Sports Document OCR Tool', divider='red')
 with st.expander('Instructions'):    
     st.markdown(
     """
