@@ -8,6 +8,7 @@ langchain-community
 langchain-openai
 langchain-chroma
 chromadb
+chroma-hnswlib==0.7.3
 scikit-learn
 pysqlite3-binary
 tiktoken
@@ -19,5 +20,3 @@ opencv-python
 imutils
 scikit-image
 streamlit-chromadb-connection
-
-
