@@ -59,6 +59,7 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
     print(splits)
     vectorstore = Chroma.from_documents(documents=splits,embedding=OpenAIEmbeddings(model = "text-embedding-3-large", openai_api_key=OPENAI_API_KEY))
     retriever = vectorstore.as_retriever()
+    print(retriever)
 
 
     return vectorstore, retriever, words
