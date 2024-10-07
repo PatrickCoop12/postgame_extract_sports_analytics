@@ -331,6 +331,6 @@ if file_upload is not None:
                 )
     
     # Deleting all items from vectorstore to avoid document hallucination/confusion
-    vectorstore.delete(vectorstore.get()['ids'])
+    #vectorstore.delete(vectorstore.get()['ids'])
 
 
