@@ -16,4 +16,5 @@ numpy
 opencv-python
 imutils
 scikit-image
+chromadb
 
