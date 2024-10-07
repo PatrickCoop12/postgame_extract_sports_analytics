@@ -19,3 +19,4 @@ numpy
 opencv-python
 imutils
 scikit-image
+protobuf==3.20.*
