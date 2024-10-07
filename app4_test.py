@@ -2,9 +2,8 @@ import streamlit as st
 import openai, boto3
 from PIL import Image
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
-from langchain.chat_models import ChatOpenAI
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from pathlib import Path
@@ -20,8 +19,6 @@ from textractor import Textractor
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 import chromadb
-
-chromadb.api.client.SharedSystemClient.clear_system_cache()
 
 # Calling required API keys from streamlit secrets
 os.environ['AWS_ACCESS_KEY_ID'] = st.secrets['AWS_ACCESS_KEY_ID']
