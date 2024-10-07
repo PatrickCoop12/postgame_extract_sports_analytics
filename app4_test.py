@@ -21,6 +21,9 @@ from textractor import Textractor
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 import chromadb
+import chromadb.api
+
+chromadb.api.client.SharedSystemClient.clear_system_cache()
 #from streamlit_chromadb_connection import ChromadbConnection
 
 
