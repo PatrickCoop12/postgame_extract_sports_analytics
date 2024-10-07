@@ -3,7 +3,7 @@ import openai, boto3
 from PIL import Image
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
@@ -56,7 +56,7 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     splits = text_splitter.create_documents([words])
     print(splits)
-    vectorstore = Chroma.from_documents(documents=splits,embedding=OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY))
+    vectorstore = Chroma.from_documents(documents=splits,embedding=OpenAIEmbeddings(model = "text-embedding-3-large", openai_api_key=OPENAI_API_KEY))
     retriever = vectorstore.as_retriever()
 
 
