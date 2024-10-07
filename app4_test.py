@@ -228,10 +228,10 @@ if "messages" not in st.session_state:
 
 if file_upload is not None:
     
-    try:
-        vectorstore.delete(vectorstore.get()['ids'])
-    except:
-        pass
+    #try:
+        #vectorstore.delete(vectorstore.get()['ids'])
+    #except:
+        #pass
         
     st.markdown('#### Chatbot')
     # Temporary file saving
