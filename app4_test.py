@@ -18,7 +18,7 @@ from skimage.filters import threshold_local
 from textractor import Textractor
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
-import chromadb
+
 
 # Calling required API keys from streamlit secrets
 os.environ['AWS_ACCESS_KEY_ID'] = st.secrets['AWS_ACCESS_KEY_ID']
