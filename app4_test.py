@@ -66,7 +66,7 @@ def document_to_retriever(document, chunk_size, chunk_overlap):
 # Response generation function
 def generate_response(retriever, input_text):
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-    qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4-1106-preview", temperature=0,
+    qa = ConversationalRetrievalChain.from_llm(ChatOpenAI(model_name="gpt-4o", temperature=0,
                                                           openai_api_key=OPENAI_API_KEY),
                                                retriever=retriever, verbose=True, memory=st.session_state.memory)
     result = qa({"chat_history": chat_history, "question":input_text})
