@@ -21,7 +21,7 @@ from textractor import Textractor
 from textractor.visualizers.entitylist import EntityList
 from textractor.data.constants import TextractFeatures, Direction, DirectionalFinderType
 import chromadb
-from streamlit_chromadb_connection import ChromadbConnection
+#from streamlit_chromadb_connection import ChromadbConnection
 
 
 # Calling required API keys from streamlit secrets
