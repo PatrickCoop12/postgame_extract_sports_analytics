@@ -17,5 +17,6 @@ numpy
 opencv-python
 imutils
 scikit-image
+streamlit-chromadb-connection
 
 
