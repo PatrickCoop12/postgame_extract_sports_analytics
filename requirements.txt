@@ -1,14 +1,14 @@
 streamlit
 Streamline
 openai
-boto3
+boto3==1.35.34
+botocore==1.35.34
 pillow
 langchain
 langchain-community
 langchain-openai
 langchain-chroma
 chromadb
-chroma-hnswlib==0.7.3
 scikit-learn
 pysqlite3-binary
 tiktoken
@@ -19,4 +19,3 @@ numpy
 opencv-python
 imutils
 scikit-image
-streamlit-chromadb-connection
