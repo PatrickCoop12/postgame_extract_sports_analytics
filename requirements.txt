@@ -2,7 +2,7 @@ Streamline
 openai
 boto3
 pillow
-langchain== 0.0.351
+langchain
 langchain-community
 langchain-openai
 langchain-chroma
