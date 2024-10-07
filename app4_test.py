@@ -1,3 +1,7 @@
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 import streamlit as st
 import openai, boto3
 from PIL import Image
@@ -9,8 +13,6 @@ from langchain.chains import ConversationalRetrievalChain
 from pathlib import Path
 import os
 import io
-__import__('pysqlite3')
-import sys
 import numpy as np
 import cv2
 import imutils
@@ -25,8 +27,7 @@ os.environ['AWS_ACCESS_KEY_ID'] = st.secrets['AWS_ACCESS_KEY_ID']
 os.environ['AWS_SECRET_ACCESS_KEY'] = st.secrets['AWS_SECRET_ACCESS_KEY']
 OPENAI_API_KEY = st.secrets['OPENAI_API_KEY']
 
-# Required reassignment of built in sqlite3 modules in order for chromadb module to function
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 
 # Initializing extraction tools
 textract = boto3.client('textract', region_name='us-east-1', aws_access_key_id=st.secrets['AWS_ACCESS_KEY_ID'],aws_secret_access_key=st.secrets['AWS_SECRET_ACCESS_KEY'])
