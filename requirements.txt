@@ -5,7 +5,7 @@ pillow
 langchain== 0.0.351
 langchain-community
 langchain-openai
-chromadb
+chromadb==0.3.29
 scikit-learn
 pysqlite3-binary
 tiktoken
@@ -16,5 +16,5 @@ numpy
 opencv-python
 imutils
 scikit-image
-chromadb
+
 
