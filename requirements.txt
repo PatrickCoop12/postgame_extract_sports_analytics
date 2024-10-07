@@ -1,5 +1,5 @@
 Streamline
-openai==0.28.1
+openai
 boto3
 pillow
 langchain== 0.0.351
